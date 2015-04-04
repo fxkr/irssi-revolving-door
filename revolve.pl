@@ -87,11 +87,11 @@ sub summarize {
     @summarized = ();
     foreach my $part (qw/Joins Parts Quits Nicks/) {
         if (scalar @{$door{$part}}) {
-            push @summarized, "\%W$part:\%n " . join(', ', @{$door{$part}});
+            push @summarized, "\%K$part\%n: " . "\%k" . join(', ', @{$door{$part}}) . "\%n";
         }
     }
 
-    my $summary = $timestamp . join(' -- ', @summarized);
+    my $summary = $timestamp . join(' %K--%n ', @summarized) . "\%n";
     $window->print($summary, MSGLEVEL_NEVER);
 
     # Get the line we just printed so we can log its ID.
