@@ -56,10 +56,12 @@ sub summarize {
         @{$door{'Parts'}} = grep { $_ ne $nick } @{$door{'Parts'}} if (scalar @{$door{'Parts'}});
         @{$door{'Quits'}} = grep { $_ ne $nick } @{$door{'Quits'}} if (scalar @{$door{'Quits'}});
     } elsif ($type eq '__revolving_door_quit') { # Quit
-        push(@{$door{'Quits'}}, $nick) if (!grep(/^\Q$nick\E$/, @{$door{'Joins'}}));
+        push(@{$door{'Quits'}}, $nick) if (!grep(/^\Q$nick\E$/, @{$door{'Quits'}}));
+        @{$door{'Parts'}} = grep { $_ ne $nick } @{$door{'Parts'}} if (scalar @{$door{'Parts'}});
         @{$door{'Joins'}} = grep { $_ ne $nick } @{$door{'Joins'}} if (scalar @{$door{'Joins'}});
     } elsif ($type eq '__revolving_door_part') { # Part
-        push(@{$door{'Parts'}}, $nick) if (!grep(/^\Q$nick\E$/, @{$door{'Joins'}}));;
+        push(@{$door{'Parts'}}, $nick) if (!grep(/^\Q$nick\E$/, @{$door{'Parts'}}));;
+        @{$door{'Quits'}} = grep { $_ ne $nick } @{$door{'Quits'}} if (scalar @{$door{'Quits'}});
         @{$door{'Joins'}} = grep { $_ ne $nick } @{$door{'Joins'}} if (scalar @{$door{'Joins'}});;
     } else { # Nick
         my $nick_found = 0;
