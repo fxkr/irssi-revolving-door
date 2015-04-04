@@ -1,6 +1,7 @@
 use Irssi;
 use strict;
 use Irssi::TextUI;
+use POSIX qw(strftime);
 use vars qw($VERSION %IRSSI);
 
 $VERSION = "0.0.2";
@@ -26,6 +27,9 @@ sub summarize {
     my $view = $window->view();
     my $check = $server->{tag} . ':' . $channel;
 
+    my $timestamp_format = Irssi::settings_get_str('timestamp_format');
+    my $timestamp = strftime(Irssi::settings_get_str('timestamp_format')." ", localtime);
+
     $view->set_bookmark_bottom('bottom');
     my $last = $view->get_bookmark('bottom');
     my $secondlast = $last->prev();
@@ -38,6 +42,7 @@ sub summarize {
     my @summarized = ();
     if ($secondlast and %summary_lines and $secondlast->{'_irssi'} == $summary_lines{$check}) {
         my $summary = Irssi::strip_codes($secondlast->get_text(1));
+        $summary = substr $summary, length($timestamp);
         @summarized = split(/ -- /, $summary);
         foreach my $part (@summarized) {
             my ($type, $nicks) = split(/: /, $part);
@@ -86,7 +91,7 @@ sub summarize {
         }
     }
 
-    my $summary = join(' -- ', @summarized);
+    my $summary = $timestamp . join(' -- ', @summarized);
     $window->print($summary, MSGLEVEL_NEVER);
 
     # Get the line we just printed so we can log its ID.
