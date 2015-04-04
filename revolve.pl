@@ -88,7 +88,7 @@ sub summarize {
 
     my $summary = join(' -- ', @summarized);
     $window->print($summary, MSGLEVEL_NEVER);
-    
+
     # Get the line we just printed so we can log its ID.
     $view->set_bookmark_bottom('bottom');
     $last = $view->get_bookmark('bottom');
